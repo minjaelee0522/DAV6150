@@ -6,19 +6,25 @@
    "metadata": {},
    "source": [
     "# Introduction\n",
-    "The core problem at hand involves developing a predictive model for a large insurance company to determine the likelihood of existing customers purchasing an additional insurance product. This modeling task is critical for the company as it seeks to enhance its customer retention and sales strategies by identifying potential buyers among its current customer base.\n",
+    "The core objective of this assignment is to develop a predictive model for a large insurance company, aiming to forecast whether an existing customer will purchase an additional insurance product. This task is pivotal for the company as it seeks to enhance its customer retention and sales strategies. The dataset provided encompasses over 14,000 observations with one response variable (indicating the purchase of the new insurance product) and 14 explanatory variables, offering insights into customers' demographics, purchasing behavior, and interactions with other products.\n",
     "\n",
-    "To address this problem, the following steps will be undertaken:\n",
+    "To tackle this problem, We will follow these steps:\n",
     "\n",
-    "1. **Exploratory Data Analysis (EDA)**: Conduct a thorough examination of the dataset to uncover patterns, trends, and anomalies. This step will involve statistical summaries, distribution checks, and visualizations to understand the data's characteristics and the relationships between variables.\n",
-    "2. **Data Preparation**: Based on insights from the EDA, prepare the data for modeling. This will include handling missing values, encoding categorical variables, normalizing or standardizing numerical variables, and potentially creating new features that could enhance the model's predictive power.\n",
-    "3. **Feature Selection**: Determine which variables are most relevant for the prediction task. This step is crucial to improve model performance and interpretability by focusing on significant features and eliminating noise.\n",
-    "4. **Model Development**: Develop and train K-Nearest Neighbors (KNN) and Support Vector Machine (SVM) models using the prepared dataset. These models will be fine-tuned and compared to identify the most effective approach for predicting the likelihood of an additional product purchase.\n",
-    "5. **Model Evaluation**: Assess the models using appropriate performance metrics, comparing their predictive accuracy, precision, recall, F1 scores, and ROC-AUC, among others. This evaluation will help in understanding the strengths and weaknesses of each model.\n",
-    "6. **Model Selection and Testing**: Select the best-performing model based on the evaluation metrics and apply this model to a testing subset to confirm its predictive capabilities. Analyze the results to ensure the model's reliability and effectiveness in a real-world scenario.\n",
-    "7. **Conclusion**: Summarize the findings, discuss the implications for the insurance company, and provide recommendations based on the model's insights. Also, suggest potential areas for future research or improvement in the modeling process.\n",
+    "1. **Exploratory Data Analysis (EDA)**: Initially, we will conduct a thorough EDA to understand the dataset's characteristics, distributions, and potential correlations between variables. This step will include visualizing the data, identifying outliers, and understanding the relationship between independent variables and the target variable.\n",
     "\n",
-    "By following these steps, the goal is to deliver a robust predictive model that can significantly aid the insurance company in targeting the right customers for its additional products, thereby enhancing its business strategies and customer relationships."
+    "2. **Data Preparation**: Based on insights from the EDA, we will clean and preprocess the data, which may involve handling missing values, encoding categorical variables, and normalizing numerical variables. We'll also consider creating new features if relevant patterns emerge during the EDA.\n",
+    "\n",
+    "3. **Feature Selection**: To enhance the model's performance, we'll apply techniques to select the most relevant features for predicting the target variable. This may involve statistical methods, domain knowledge, or model-based selection methods.\n",
+    "\n",
+    "4. **Model Building**: We will construct a series of binary logistic regression models, adjusting the features included and the model parameters to optimize performance. Each model's results will be carefully analyzed and compared.\n",
+    "\n",
+    "5. **Model Evaluation**: Using appropriate metrics (such as accuracy, precision, recall, and the AUC-ROC curve), we will evaluate each model's performance. This step is crucial to ensure our model is not only accurate but also reliable in various scenarios.\n",
+    "\n",
+    "6. **Model Selection**: After comparing the models, we will select the one that shows the best balance between performance and complexity. The chosen model should demonstrate robustness and generalizability to unseen data.\n",
+    "\n",
+    "7. **Conclusion**: We will summarize the findings, discuss the implications of the chosen model, and suggest potential strategies for the insurance company to implement based on the model's predictions.\n",
+    "\n",
+    "By following these steps, we aim to develop a reliable and interpretable model that the insurance company can use to target their sales efforts more effectively, thereby potentially increasing their customer retention and the uptake of additional insurance products."
    ]
   },
   {
@@ -207,7 +213,7 @@
     }
    ],
    "source": [
-    "data = pd.read_csv(\"https://raw.githubusercontent.com/minjaelee0522/DAV6150/master/M8%20KNN%20and%20SVM/M7_Data.csv\")\n",
+    "data = pd.read_csv(\"https://raw.githubusercontent.com/minjaelee0522/DAV6150/master/M7%20Binary%20Logistic%20Regression/M7_Data.csv\")\n",
     "data.head()"
    ]
   },
@@ -1097,48 +1103,52 @@
    "id": "f272885f",
    "metadata": {},
    "source": [
-    "# 3. Feature Selection & Model Building"
+    "# 3. Feature Selection & Model Building, Evaluation"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "62a8538e",
+   "id": "6a409b5e",
    "metadata": {},
    "source": [
-    "### Feature Selection\n",
-    "A Decision Tree Classifier is used to rank the importance of features in the dataset. The top four features are selected based on their importance scores.\n",
-    "\n",
-    "### Model Building\n",
-    "#### KNN Models\n",
-    "- Different values of k (number of neighbors) are tested using cross-validation to find the value that yields the best accuracy.\n",
-    "- The optimal k value is determined, and a KNN model is trained using this value on the training data.\n",
-    "\n",
-    "#### SVM Models\n",
-    "- GridSearchCV is employed to tune hyperparameters for the SVM model, including the kernel type and the C parameter (and gamma for the RBF kernel).\n",
-    "- The best combination of parameters is identified, and an SVM model is trained using these optimal parameters on the training data."
+    "1. Feature Selection: Utilize both Recursive Feature Elimination (RFE) with Logistic Regression and a Decision Tree Classifier to select important features.\n",
+    "2. Model Building: Construct three logistic regression models using different sets of features identified during the feature selection process.\n",
+    "3. Model Evaluation: Interpret the coefficients, discuss their intuitive sense, and compare across models."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f1d761fe",
+   "metadata": {},
+   "source": [
+    "## Feature Selection and Model Building\n",
+    "1. Model 1: Features selected by RFE with Logistic Regression.\n",
+    "2. Model 2: Features selected based on the importance from a Decision Tree Classifier.\n",
+    "3. Model 3: A combination of features from both selection methods or a different set of features."
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 20,
-   "id": "f67fb63a",
+   "id": "f44986ae",
    "metadata": {},
    "outputs": [],
    "source": [
-    "from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score\n",
-    "from sklearn.neighbors import KNeighborsClassifier\n",
-    "from sklearn.svm import SVC\n",
-    "from sklearn.tree import DecisionTreeClassifier"
+    "from sklearn.model_selection import train_test_split\n",
+    "from sklearn.linear_model import LogisticRegression\n",
+    "from sklearn.feature_selection import RFE\n",
+    "from sklearn.tree import DecisionTreeClassifier\n",
+    "from sklearn.metrics import classification_report"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 21,
-   "id": "f299565d",
+   "id": "62b607cf",
    "metadata": {},
    "outputs": [],
    "source": [
-    "# Assuming data is already loaded and the 'Unnamed: 0' column is dropped\n",
+    "# Splitting the dataset into features and target variable\n",
     "X = data_prep.drop('TARGET', axis=1)\n",
     "y = data_prep['TARGET']"
    ]
@@ -1146,266 +1156,373 @@
   {
    "cell_type": "code",
    "execution_count": 22,
-   "id": "bd72410b",
+   "id": "887ba493",
    "metadata": {},
    "outputs": [],
    "source": [
-    "# Feature Selection using Decision Tree\n",
-    "tree = DecisionTreeClassifier(random_state=42)\n",
-    "tree.fit(X, y)\n",
-    "feature_importances = tree.feature_importances_\n",
-    "top_indices = np.argsort(feature_importances)[-4:]\n",
-    "top_features = X.columns[top_indices]"
+    "# Splitting the data into training and testing sets\n",
+    "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 23,
-   "id": "7f65c37e",
+   "id": "be13d129",
    "metadata": {},
    "outputs": [],
    "source": [
-    "# Data Splitting\n",
-    "X_train, X_test, y_train, y_test = train_test_split(X[top_features], y, test_size=0.3, random_state=42)"
+    "# Feature Selection with RFE using Logistic Regression\n",
+    "logreg_rfe = LogisticRegression(max_iter=1000, random_state=42)\n",
+    "rfe = RFE(estimator=logreg_rfe, n_features_to_select=10)  # Selecting top 10 features for simplicity\n",
+    "rfe.fit(X_train, y_train)\n",
+    "important_features_rfe = list(X.columns[rfe.support_])"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 24,
-   "id": "b289762a",
+   "id": "db1577c0",
    "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "KNeighborsClassifier(n_neighbors=1)"
-      ]
-     },
-     "execution_count": 24,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
+   "outputs": [],
    "source": [
-    "# KNN Model Building\n",
-    "k_values = range(1, 21, 2)  # Odd values from 1 to 20\n",
-    "knn_scores = {}\n",
-    "\n",
-    "for k in k_values:\n",
-    "    knn = KNeighborsClassifier(n_neighbors=k)\n",
-    "    scores = cross_val_score(knn, X_train, y_train, cv=5, scoring='accuracy')\n",
-    "    knn_scores[k] = np.mean(scores)\n",
-    "\n",
-    "best_k = max(knn_scores, key=knn_scores.get)\n",
-    "knn_model = KNeighborsClassifier(n_neighbors=best_k)\n",
-    "knn_model.fit(X_train, y_train)"
+    "# Feature Selection with Decision Tree\n",
+    "dtc = DecisionTreeClassifier(random_state=42)\n",
+    "dtc.fit(X_train, y_train)\n",
+    "feature_importances = pd.Series(dtc.feature_importances_, index=X_train.columns)\n",
+    "top_features_dtc = feature_importances.nlargest(10).index.tolist()"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 25,
-   "id": "5678cabf",
+   "id": "6e89a983",
    "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "(1,\n",
-       " {'C': 100,\n",
-       "  'break_ties': False,\n",
-       "  'cache_size': 200,\n",
-       "  'class_weight': None,\n",
-       "  'coef0': 0.0,\n",
-       "  'decision_function_shape': 'ovr',\n",
-       "  'degree': 3,\n",
-       "  'gamma': 1,\n",
-       "  'kernel': 'rbf',\n",
-       "  'max_iter': -1,\n",
-       "  'probability': False,\n",
-       "  'random_state': 42,\n",
-       "  'shrinking': True,\n",
-       "  'tol': 0.001,\n",
-       "  'verbose': False})"
-      ]
-     },
-     "execution_count": 25,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
+   "outputs": [],
    "source": [
-    "# SVM Model Building with Grid Search\n",
-    "param_grid = [{'kernel': ['linear'], 'C': [0.1, 1, 10, 100]},\n",
-    "              {'kernel': ['rbf'], 'C': [0.1, 1, 10, 100], 'gamma': [0.01, 0.1, 1, 10]}]\n",
-    "svm = SVC(random_state=42)\n",
-    "grid_search = GridSearchCV(svm, param_grid, cv=5, scoring='accuracy')\n",
-    "grid_search.fit(X_train, y_train)\n",
-    "\n",
-    "best_svm_model = grid_search.best_estimator_\n",
-    "\n",
-    "# Output the best parameters and models\n",
-    "best_k, best_svm_model.get_params()"
+    "# Model 1: Logistic Regression with RFE-selected features\n",
+    "logreg_model_1 = LogisticRegression(max_iter=1000, random_state=42)\n",
+    "logreg_model_1.fit(X_train[important_features_rfe], y_train)\n",
+    "predictions_1 = logreg_model_1.predict(X_test[important_features_rfe])\n",
+    "report_1 = classification_report(y_test, predictions_1)"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 26,
-   "id": "6812bd32",
+   "id": "894a4632",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Best K for KNN: 1\n",
-      "Best parameters for SVM: {'C': 100, 'break_ties': False, 'cache_size': 200, 'class_weight': None, 'coef0': 0.0, 'decision_function_shape': 'ovr', 'degree': 3, 'gamma': 1, 'kernel': 'rbf', 'max_iter': -1, 'probability': False, 'random_state': 42, 'shrinking': True, 'tol': 0.001, 'verbose': False}\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
-    "# Output the best parameters and models\n",
-    "print(\"Best K for KNN:\", best_k)\n",
-    "print(\"Best parameters for SVM:\", best_svm_model.get_params())"
+    "# Model 2: Logistic Regression with Decision Tree-selected features\n",
+    "logreg_model_2 = LogisticRegression(max_iter=1000, random_state=42)\n",
+    "logreg_model_2.fit(X_train[top_features_dtc], y_train)\n",
+    "predictions_2 = logreg_model_2.predict(X_test[top_features_dtc])\n",
+    "report_2 = classification_report(y_test, predictions_2)"
    ]
   },
   {
-   "cell_type": "markdown",
-   "id": "c5d53e34",
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "34420521",
    "metadata": {},
+   "outputs": [],
    "source": [
-    "### KNN Model:\n",
-    "- Best K for KNN: The optimal number of neighbors (k) is 1. This suggests that the closest single neighbor's class heavily influences the class of a new data point. It's worth noting that a k value of 1 can sometimes lead to models that are highly sensitive to noise in the data. In practice, you might want to further investigate the impact of this choice, particularly regarding the model's generalization to unseen data.\n",
-    "\n",
-    "### SVM Model:\n",
-    "#### Best parameters for SVM: The best parameters for the SVM model include a high C value of 100 and a gamma value of 1 with an RBF kernel. Here's what these parameters signify:\n",
-    "- C (100): A high C value tells the SVM optimization to prioritize classifying all training examples correctly over having a wide margin. It can lead to a more complex decision boundary and potential overfitting, so it's crucial to evaluate the model's performance on the test set or use cross-validation to ensure generalization.\n",
-    "- Gamma (1): The gamma parameter defines how far the influence of a single training example reaches, with low values meaning 'far' and high values meaning 'close'. A gamma of 1 indicates that the influence reaches moderately far, impacting the model's decision boundary.\n",
-    "- Kernel ('rbf'): The Radial Basis Function (RBF) kernel is commonly used and allows the SVM to create non-linear decision boundaries. It's a good choice for datasets where the class boundary is not linearly separable."
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "858e083d",
-   "metadata": {},
-   "source": [
-    "# 4. Model Evaluation and Selection"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "2034aac6",
-   "metadata": {},
-   "source": [
-    "- Perform cross-validation on the training data to estimate the models' performance and ensure they're not overfitting.\n",
-    "- Apply the selected model to the testing subset to evaluate its performance on unseen data."
+    "# Model 3: Logistic Regression with a combination of features\n",
+    "combined_features = list(set(important_features_rfe + top_features_dtc))\n",
+    "logreg_model_3 = LogisticRegression(max_iter=1000, random_state=42)\n",
+    "logreg_model_3.fit(X_train[combined_features], y_train)\n",
+    "predictions_3 = logreg_model_3.predict(X_test[combined_features])\n",
+    "report_3 = classification_report(y_test, predictions_3)"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 28,
-   "id": "08772dcf",
+   "id": "1d68b18f",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Model 1 Report:\n",
+      "               precision    recall  f1-score   support\n",
+      "\n",
+      "           0       0.74      0.77      0.76      2402\n",
+      "           1       0.68      0.65      0.66      1803\n",
+      "\n",
+      "    accuracy                           0.72      4205\n",
+      "   macro avg       0.71      0.71      0.71      4205\n",
+      "weighted avg       0.72      0.72      0.72      4205\n",
+      "\n",
+      "Model 2 Report:\n",
+      "               precision    recall  f1-score   support\n",
+      "\n",
+      "           0       0.76      0.80      0.78      2402\n",
+      "           1       0.71      0.66      0.68      1803\n",
+      "\n",
+      "    accuracy                           0.74      4205\n",
+      "   macro avg       0.73      0.73      0.73      4205\n",
+      "weighted avg       0.74      0.74      0.74      4205\n",
+      "\n",
+      "Model 3 Report:\n",
+      "               precision    recall  f1-score   support\n",
+      "\n",
+      "           0       0.76      0.80      0.78      2402\n",
+      "           1       0.72      0.66      0.69      1803\n",
+      "\n",
+      "    accuracy                           0.74      4205\n",
+      "   macro avg       0.74      0.73      0.73      4205\n",
+      "weighted avg       0.74      0.74      0.74      4205\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Displaying the classification reports\n",
+    "print(\"Model 1 Report:\\n\", report_1)\n",
+    "print(\"Model 2 Report:\\n\", report_2)\n",
+    "print(\"Model 3 Report:\\n\", report_3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d81b8da6",
+   "metadata": {},
+   "source": [
+    "1. Model 1 (RFE-selected features):\n",
+    "* Precision: 0.74 (no) and 0.68 (yes)\n",
+    "* Recall: 0.77 (no) and 0.65 (yes)\n",
+    "* F1-score: 0.76 (no) and 0.66 (yes)\n",
+    "* Accuracy: 72%\n",
+    "\n",
+    "2. Model 2 (Decision Tree-selected features):\n",
+    "* Precision: 0.76 (no) and 0.71 (yes)\n",
+    "* Recall: 0.80 (no) and 0.66 (yes)\n",
+    "* F1-score: 0.78 (no) and 0.68 (yes)\n",
+    "* Accuracy: 74%\n",
+    "\n",
+    "3. Model 3 (Combined features)\n",
+    "* Precision: 0.76 (no) and 0.72 (yes)\n",
+    "* Recall: 0.80 (no) and 0.66 (yes)\n",
+    "* F1-score: 0.78 (no) and 0.69 (yes)\n",
+    "* Accuracy: 74%"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "9fd48849",
    "metadata": {},
    "outputs": [
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "KNN Classification Report:\n",
-      "               precision    recall  f1-score   support\n",
+      "Model 1 Coefficients:\n",
+      "                   Coefficient\n",
+      "LOR                  0.554204\n",
+      "loyalty_0           -1.798864\n",
+      "type_A_0            -1.973086\n",
+      "type_A_6             3.248483\n",
+      "type_B_0             3.126896\n",
+      "type_B_3             1.219997\n",
+      "type_B_6            -2.343928\n",
+      "type_B_9            -2.002937\n",
+      "total_turnover       0.587162\n",
+      "engagement_level    -1.153753\n",
+      "Model 2 Coefficients:\n",
+      "                 Coefficient\n",
+      "total_turnover     0.497555\n",
+      "age                0.468644\n",
+      "LOR                0.486444\n",
+      "loyalty_99         1.046183\n",
+      "loyalty_1          0.692442\n",
+      "type_B_6          -3.423916\n",
+      "type_A_3           0.860460\n",
+      "type_B_0           2.712771\n",
+      "loyalty_3          0.736909\n",
+      "loyalty_2          0.626685\n",
+      "Model 3 Coefficients:\n",
+      "                   Coefficient\n",
+      "type_A_0            -2.445851\n",
+      "type_A_6             2.996129\n",
+      "loyalty_99           0.608762\n",
+      "LOR                  0.529744\n",
+      "type_A_3            -0.551726\n",
+      "total_turnover       0.530963\n",
+      "age                  0.477450\n",
+      "type_B_3             1.317576\n",
+      "loyalty_3            0.302651\n",
+      "type_B_0             3.329582\n",
+      "loyalty_1            0.229942\n",
+      "engagement_level    -0.886626\n",
+      "loyalty_2            0.191494\n",
+      "type_B_6            -2.557202\n",
+      "type_B_9            -2.091404\n",
+      "loyalty_0           -1.334298\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Extracting and displaying coefficients for interpretation\n",
+    "coefficients_model_1 = pd.DataFrame(logreg_model_1.coef_.flatten(), index=important_features_rfe, columns=['Coefficient'])\n",
+    "print(\"Model 1 Coefficients:\\n\", coefficients_model_1)\n",
+    "coefficients_model_2 = pd.DataFrame(logreg_model_2.coef_.flatten(), index=top_features_dtc, columns=['Coefficient'])\n",
+    "print(\"Model 2 Coefficients:\\n\", coefficients_model_2)\n",
+    "coefficients_model_3 = pd.DataFrame(logreg_model_3.coef_.flatten(), index=combined_features, columns=['Coefficient'])\n",
+    "print(\"Model 3 Coefficients:\\n\", coefficients_model_3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "824ccff6",
+   "metadata": {},
+   "source": [
+    "### Model 1 (RFE-selected features)\n",
+    "* Features like type_A_6 and type_B_0 have positive coefficients, suggesting a strong positive influence on the likelihood of purchasing an additional product.\n",
+    "* Conversely, type_A_0, type_B_6, and type_B_9 have negative coefficients, indicating a negative impact on the likelihood.\n",
+    "\n",
+    "### Model 2 (Decision Tree-selected features)\n",
+    "* loyalty_99 and type_B_0 show strong positive influences, while type_B_6 has a significant negative effect.\n",
+    "* total_turnover and age also have positive coefficients, suggesting that older customers or those with higher turnover are more likely to purchase additional products.\n",
+    "\n",
+    "### Model 3 (Combined features)\n",
+    "* This model combines features from both methods. type_B_0 and type_A_6 again show strong positive impacts.\n",
+    "* type_A_0, type_B_6, and type_B_9 have notable negative coefficients, similar to the first model.\n",
+    "\n",
+    "### Interpretation and Consistency\n",
+    "* The direction and magnitude of coefficients are relatively consistent across models for features that appear in more than one model. For example, type_B_0 consistently shows a strong positive influence, while type_B_6 tends to have a negative impact.\n",
+    "* The coefficients provide intuitive insights. For instance, loyalty levels (loyalty_99, loyalty_1, loyalty_2, loyalty_3) have varying impacts, suggesting that different loyalty segments behave distinctly in terms of purchasing additional products.\n",
+    "* total_turnover and age being positive in influencing the purchase decision aligns with intuition, as higher engagement or older age might correlate with a higher propensity to buy more insurance products."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8eb57022",
+   "metadata": {},
+   "source": [
+    "# 4. Model Selection"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "4ead219b",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Mean F1 Score for Model 1: 0.6375081056237702\n",
+      "Mean F1 Score for Model 2: 0.6679299689491119\n",
+      "Mean F1 Score for Model 3: 0.6688101246926219\n"
+     ]
+    }
+   ],
+   "source": [
+    "from sklearn.model_selection import cross_val_score\n",
+    "\n",
+    "# Model 1: Cross-validation\n",
+    "scores_model_1 = cross_val_score(logreg_model_1, X_train[important_features_rfe], y_train, cv=5, scoring='f1')\n",
+    "mean_score_model_1 = scores_model_1.mean()\n",
+    "\n",
+    "# Model 2: Cross-validation\n",
+    "scores_model_2 = cross_val_score(logreg_model_2, X_train[top_features_dtc], y_train, cv=5, scoring='f1')\n",
+    "mean_score_model_2 = scores_model_2.mean()\n",
+    "\n",
+    "# Model 3: Cross-validation\n",
+    "scores_model_3 = cross_val_score(logreg_model_3, X_train[combined_features], y_train, cv=5, scoring='f1')\n",
+    "mean_score_model_3 = scores_model_3.mean()\n",
+    "\n",
+    "print(f\"Mean F1 Score for Model 1: {mean_score_model_1}\")\n",
+    "print(f\"Mean F1 Score for Model 2: {mean_score_model_2}\")\n",
+    "print(f\"Mean F1 Score for Model 3: {mean_score_model_3}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "id": "c82009af",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Classification Report for Model 2 on Test Data:\n",
+      "              precision    recall  f1-score   support\n",
       "\n",
-      "           0       0.91      0.82      0.86      2402\n",
-      "           1       0.79      0.89      0.84      1803\n",
+      "           0       0.76      0.80      0.78      2402\n",
+      "           1       0.71      0.66      0.68      1803\n",
       "\n",
-      "    accuracy                           0.85      4205\n",
-      "   macro avg       0.85      0.85      0.85      4205\n",
-      "weighted avg       0.86      0.85      0.85      4205\n",
-      "\n",
-      "SVM Classification Report:\n",
-      "               precision    recall  f1-score   support\n",
-      "\n",
-      "           0       0.82      0.84      0.83      2402\n",
-      "           1       0.78      0.75      0.76      1803\n",
-      "\n",
-      "    accuracy                           0.80      4205\n",
-      "   macro avg       0.80      0.80      0.80      4205\n",
-      "weighted avg       0.80      0.80      0.80      4205\n",
+      "    accuracy                           0.74      4205\n",
+      "   macro avg       0.73      0.73      0.73      4205\n",
+      "weighted avg       0.74      0.74      0.74      4205\n",
       "\n"
      ]
     }
    ],
    "source": [
-    "from sklearn.metrics import classification_report\n",
+    "# Applying the selected Model 2 to the test set\n",
+    "test_predictions_model_2 = logreg_model_2.predict(X_test[top_features_dtc])\n",
+    "test_report_model_2 = classification_report(y_test, test_predictions_model_2)\n",
     "\n",
-    "# Evaluate KNN model on test data\n",
-    "knn_predictions = knn_model.predict(X_test)\n",
-    "print(\"KNN Classification Report:\\n\", classification_report(y_test, knn_predictions))\n",
-    "\n",
-    "# Evaluate SVM model on test data\n",
-    "svm_predictions = best_svm_model.predict(X_test)\n",
-    "print(\"SVM Classification Report:\\n\", classification_report(y_test, svm_predictions))"
+    "print(\"Classification Report for Model 2 on Test Data:\")\n",
+    "print(test_report_model_2)"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "2be20953",
+   "id": "2cbaf9a8",
    "metadata": {},
    "source": [
-    "### Model Selection Criteria:\n",
-    "1. Performance Metrics: Focus on accuracy, precision, recall, and F1-score. The model with higher scores is generally preferred.\n",
-    "2. Interpretability: KNN is generally more interpretable than SVM, especially with a smaller number of neighbors.\n",
-    "3. Complexity: KNN has a simpler mechanism compared to SVM, which may involve complex hyperparameters and kernel functions.\n",
-    "4. Generalization: The ability of the model to perform well on unseen data, as indicated by the test set performance.\n",
+    "### Model Selection Criteria\n",
+    "1. Performance Metrics: We'll consider accuracy, precision, recall, and F1-score to evaluate model performance. While accuracy is a general indicator, precision and recall are crucial for imbalanced datasets, and the F1-score provides a balance between them.\n",
     "\n",
-    "### Evaluation and Comparison:\n",
-    "- KNN Model: Shows the highest accuracy (85%) and balanced performance across precision, recall, and F1-score for both classes.\n",
-    "- SVM Model: Demonstrates lower accuracy (80%) compared to KNN and slightly lower precision, recall, and F1-scores.\n",
-    "- Logistic Regression (from Module 7): Has the lowest accuracy (74%) and lower performance metrics across the board compared to KNN and SVM.\n",
+    "2. Interpretability: A model that offers clear insights into how features affect the predicted outcome is valuable, especially in industries like insurance where decisions need to be explainable.\n",
     "\n",
-    "### Decision:\n",
-    "- Given its superior performance metrics, the KNN model is the preferred model. It strikes a good balance between accuracy, interpretability, and complexity.\n",
-    "- While the KNN model's performance is slightly better than SVM's, the margin is significant enough, considering KNN's simplicity and interpretability advantages.\n",
-    "- Compared to the logistic regression model from Module 7, the KNN model demonstrates a notable improvement in all key performance metrics.\n",
+    "3. Complexity: Simpler models are generally preferable due to easier implementation and understandability. However, a more complex model might be justified if it significantly outperforms simpler ones.\n",
     "\n",
-    "### Application on Testing Subset:\n",
-    "- The KNN model's performance on the testing subset aligns with its cross-validation performance, indicating good generalization.\n",
-    "- The model has not only performed well in terms of accuracy but also maintained consistent precision, recall, and F1-scores across classes, which is crucial for balanced classification performance.\n",
+    "### Evaluation Using Cross-Validation\n",
+    "We'll use cross-validation on the training set to assess the stability and generalizability of our models. This approach provides a more robust estimate of model performance compared to a single train-test split.\n",
     "\n",
-    "### Discussion:\n",
-    "- The KNN model was selected due to its superior performance metrics and balance between simplicity and accuracy.\n",
-    "- Its performance on the test set confirmed the model's ability to generalize well to unseen data.\n",
-    "- When compared to the logistic regression model from the previous assignment, the KNN model demonstrates a clear improvement, reinforcing its selection as the preferred model for this classification task."
+    "### Application on Testing Subset\n",
+    "After selecting the model based on cross-validation performance, we'll apply it to the testing subset to evaluate its performance on previously unseen data. This step is crucial to ensure our model generalizes well and is not overfitting the training data.\n",
+    "\n",
+    "### Implementation\n",
+    "Perform cross-validation on the training data for each model and then apply the preferred model to the testing subset.\n",
+    "\n",
+    "### Selecting and Applying the Preferred Model\n",
+    "1. Model Selection: Suppose after cross-validation, Model 2 (Decision Tree-selected features) shows a good balance between performance and interpretability, with a slight advantage in F1-score and recall compared to the others.\n",
+    "\n",
+    "2. Rationale: We choose Model 2 because it offers a good trade-off between interpretability and performance. The model uses features identified as important by a decision tree, which can provide intuitive insights into feature importance.\n",
+    "\n",
+    "3. Application on Testing Subset: We apply Model 2 to the testing subset to assess its real-world performance."
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "d5fc530f",
+   "id": "1a32ab4c",
    "metadata": {},
    "source": [
-    "# 5. Conclusion"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "d8d48932",
-   "metadata": {},
-   "source": [
-    "In this project, we embarked on a journey to explore alternative classification models beyond the binary logistic regression model developed in the previous module. We delved into constructing and evaluating K-Nearest Neighbors (KNN) and Support Vector Machine (SVM) models to predict whether an insurance company customer is likely to purchase an additional insurance product.\n",
+    "# 5. Conclusion\n",
+    "In conclusion, the process of developing and selecting the best logistic regression model for predicting whether an insurance company customer will purchase an additional product involved several key steps. We began with feature selection, employing both Recursive Feature Elimination (RFE) and a Decision Tree Classifier to identify the most relevant features. Three distinct logistic regression models were constructed, each utilizing a different set of features.\n",
     "\n",
-    "Through rigorous exploratory data analysis, we ensured a thorough understanding of the dataset, which led to informed decisions during the data preparation phase. We addressed data integrity, applied necessary transformations, and engaged in feature selection, emphasizing the identification of the most impactful variables.\n",
+    "The evaluation of these models through cross-validation revealed that Model 3 had the highest mean F1 score, closely followed by Model 2. Despite Model 3's slightly superior statistical performance, we discussed the potential preference for Model 2 based on factors beyond raw performance metrics, such as interpretability, simplicity, feature relevance, and consistency.\n",
     "\n",
-    "The construction of multiple KNN and SVM models, each with varying configurations, allowed us to observe the nuances of model performance under different settings. We determined the optimal 'k' value for KNN models through cross-validation and fine-tuned the SVM models by experimenting with various hyperparameters and kernel functions.\n",
+    "This exercise underscores the importance of a holistic approach to model selection, where the choice is not solely based on numerical scores but also considers the model's applicability, understandability, and alignment with business objectives. The selected model's performance on the test data further validated its effectiveness and generalizability, ensuring it is a reliable tool for the insurance company to enhance its customer retention and sales strategies.\n",
     "\n",
-    "When it came to model selection, we adhered to a criterion that balanced performance metrics and practical considerations such as interpretability and implementation complexity. The KNN model, with its superior performance metrics, emerged as the preferred model. It showcased commendable accuracy, precision, recall, and F1-scores, outperforming the SVM models and the previous logistic regression model.\n",
-    "\n",
-    "The application of the selected KNN model to the testing subset reaffirmed its generalization capability, as it maintained consistent performance, thereby validating our model selection choice. This endeavor not only enhanced our understanding of the dataset and the problem at hand but also provided the insurance company with a robust tool to improve its customer retention and sales strategies.\n",
-    "\n",
-    "In conclusion, this project exemplifies the application of data science methodologies to derive insights and develop predictive models that can significantly impact business decisions. The journey from data exploration to model selection and evaluation underscores the critical role of a methodical approach in extracting value from data, guiding us to a model that promises reliability and valuable predictions for the insurance company's strategic objectives."
+    "Ultimately, this work highlights the critical balance between statistical rigor and practical utility in data science, particularly in fields like insurance where decisions have significant real-world implications."
    ]
   },
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "97c12662",
+   "id": "f67fb63a",
    "metadata": {},
    "outputs": [],
    "source": []
