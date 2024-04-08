@@ -1,5 +1,4 @@
 
-from fastai.vision.all import *
 
 from pathlib import Path
 
