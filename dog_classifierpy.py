@@ -1,4 +1,5 @@
-
+from fastai.vision.widgets import *
+from fastai.vision.all import *
 
 from pathlib import Path
 
